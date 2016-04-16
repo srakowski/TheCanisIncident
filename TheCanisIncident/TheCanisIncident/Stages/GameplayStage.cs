@@ -14,7 +14,7 @@ namespace TheCanisIncident.Stages
     {
         protected override void LoadContent()
         {
-            LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", "sprites/adi");
+            LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", "sprites/adi", "sprites/crosshair");
         }
 
         protected override void Initialize()
@@ -30,7 +30,8 @@ namespace TheCanisIncident.Stages
         protected void LoadMap(string mapdesc)
         {
             var floorLayer = AddLayer("floor", -1);
-            var ceilingLayer = AddLayer("floor", 1);
+            var ceilingLayer = AddLayer("ceiling", 1);
+            var hudLayer = AddLayer("hud", 2);
             var x = 0;
             var y = 0;
             foreach (var c in mapdesc)
@@ -41,7 +42,7 @@ namespace TheCanisIncident.Stages
                     case 'S':
                         AddFloor(x, y, floorLayer);
                         if (c == 'S')
-                            AddPlayer(x, y);
+                            AddPlayer(x, y, hudLayer);
                         break;
 
                     case '#':
@@ -62,13 +63,17 @@ namespace TheCanisIncident.Stages
             }
         }
 
-        private void AddPlayer(int x, int y)
+        private void AddPlayer(int x, int y, Layer hudLayer)
         {
+            var crosshair = new GameObject("crosshair")
+                .AddComponent(new SpriteRenderer(hudLayer, GetContent<Texture2D>("sprites/crosshair")));
+
             var obj = new GameObject("player")
                 .SetPosition(x * 96, y * 96)
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/adi")))
-                .AddComponent(new PlayerController())
-                .AddComponent(new BoxCollider(30, 72));
+                .AddComponent(new PlayerController(crosshair))
+                .AddComponent(new BoxCollider(30, 72))
+                .AddChild(crosshair);
 
             AddGameObject(obj);
 

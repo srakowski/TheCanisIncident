@@ -21,6 +21,7 @@ namespace TheCanisIncident.WindowsDX
             _graphics.PreferredBackBufferHeight = 720;
             Content.RootDirectory = "Content";
             Components.Add(new ColdsteelComponent(this, this));
+            IsMouseVisible = true;
         }
 
         public void InitializeControls(Input input)
@@ -29,6 +30,10 @@ namespace TheCanisIncident.WindowsDX
             input.AddControl("MoveDown", new KeyboardButtonControl(Keys.S));
             input.AddControl("MoveLeft", new KeyboardButtonControl(Keys.A));
             input.AddControl("MoveRight", new KeyboardButtonControl(Keys.D));
+            input.AddControl("Aim", new MouseDirectionalControl(new Vector2(
+                GraphicsDevice.PresentationParameters.Bounds.Width * 0.5f,
+                GraphicsDevice.PresentationParameters.Bounds.Height * 0.5f
+                )));
         }
 
         public void RegisterStages(GameStageCollection stages)

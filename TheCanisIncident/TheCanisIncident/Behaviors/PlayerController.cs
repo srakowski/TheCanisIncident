@@ -13,6 +13,13 @@ namespace TheCanisIncident.Behaviors
 
         private Vector2 _previousPosition;
 
+        private GameObject _crosshair;
+
+        public PlayerController(GameObject crosshair)
+        {
+            _crosshair = crosshair;
+        }
+
         public override void OnCollision(Collision collision)
         {
             if (collision.GameObject.Tag == "ceiling" || collision.GameObject.Tag == "wall")
@@ -33,7 +40,19 @@ namespace TheCanisIncident.Behaviors
                 this.Transform.Position += new Vector2(-1, 0) * _speed * gameTime.Delta;
 
             if (Input.GetControl<ButtonControl>("MoveRight").IsDown())
-                this.Transform.Position += new Vector2(1, 0) * _speed * gameTime.Delta;            
+                this.Transform.Position += new Vector2(1, 0) * _speed * gameTime.Delta;
+
+            var aimDirection = Input.GetControl<DirectionalControl>("Aim").Direction();
+            _crosshair.Transform.LocalPosition = aimDirection;
+            if (Vector2.Distance(_crosshair.Transform.Position, Transform.Position) > 200f)
+            {
+                aimDirection.Normalize();
+                aimDirection *= 200f;
+                _crosshair.Transform.LocalPosition = aimDirection;
+            }
+
+            
+
         }
     }
 }
