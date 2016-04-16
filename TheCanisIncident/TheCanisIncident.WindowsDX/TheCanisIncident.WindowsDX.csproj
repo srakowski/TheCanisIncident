@@ -57,6 +57,7 @@
     <Content Include="Content\sprites\bullet.png" />
     <Content Include="Content\sprites\ceiling.png" />
     <Content Include="Content\sprites\crosshair.png" />
+    <Content Include="Content\sprites\enemy.png" />
     <Content Include="Content\sprites\floor.png" />
     <Content Include="Content\sprites\wall.png" />
     <Content Include="Icon.ico" />

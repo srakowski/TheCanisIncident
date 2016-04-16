@@ -15,25 +15,27 @@ namespace TheCanisIncident.Stages
         protected override void LoadContent()
         {
             LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", 
-                "sprites/adi", "sprites/crosshair", "sprites/bullet");
+                "sprites/adi", "sprites/crosshair", "sprites/bullet", "sprites/enemy");
         }
 
         protected override void Initialize()
         {
             BackgroundColor = new Color(12, 12, 12);
 
-            var map = "###########\n#WWW####WW#\n#...WWW#..#\n#......#..#\n##.#####.##\n#W.WWWWW.W#\n#...S.....#\n#.........#\n#.........#\n###########";
-            LoadMap(map);
+            var hudLayer = AddLayer("hud", 2);
+            var player = AddPlayer(hudLayer);
+
+            var map = "###########\n#WWW####WW#\n#...WWW#..#\n#.E....#..#\n##.#####.##\n#W.WWWWW.W#\n#...S.....#\n#.....E...#\n#......E..#\n###########";
+            LoadMap(map, player);
 
 
         }
 
-        protected void LoadMap(string mapdesc)
+        protected void LoadMap(string mapdesc, GameObject player)
         {
             var floorLayer = AddLayer("floor", -2);
             var bulletsLayer = AddLayer("bullets", -1);
-            var ceilingLayer = AddLayer("ceiling", 1);            
-            var hudLayer = AddLayer("hud", 2);
+            var ceilingLayer = AddLayer("ceiling", 1);                        
             var x = 0;
             var y = 0;
             foreach (var c in mapdesc)
@@ -42,9 +44,12 @@ namespace TheCanisIncident.Stages
                 {
                     case '.':
                     case 'S':
+                    case 'E':
                         AddFloor(x, y, floorLayer);
                         if (c == 'S')
-                            AddPlayer(x, y, hudLayer);
+                            player.SetPosition(x * 96, y * 96);
+                        if (c == 'E')
+                            AddEnemy(x, y, DefaultLayer, player);
                         break;
 
                     case '#':
@@ -65,13 +70,12 @@ namespace TheCanisIncident.Stages
             }
         }
 
-        private void AddPlayer(int x, int y, Layer hudLayer)
+        private GameObject AddPlayer(Layer hudLayer)
         {
             var crosshair = new GameObject("crosshair")
                 .AddComponent(new SpriteRenderer(hudLayer, GetContent<Texture2D>("sprites/crosshair")));
 
             var obj = new GameObject("player")
-                .SetPosition(x * 96, y * 96)
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/adi")))
                 .AddComponent(new PlayerController(crosshair))
                 .AddComponent(new BoxCollider(30, 72))
@@ -84,6 +88,19 @@ namespace TheCanisIncident.Stages
                 .AddComponent(new CameraFollow(obj));
 
             AddGameObject(camera);
+
+            return obj;
+        }
+
+        private void AddEnemy(int x, int y, Layer defaultLayer, GameObject player)
+        {
+            var obj = new GameObject("enemy")
+                .SetPosition(x * 96, y * 96)
+                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/enemy")))
+                .AddComponent(new BoxCollider(80, 50))
+                .AddComponent(new Enemy(player));
+
+            AddGameObject(obj);
         }
 
         private void AddCeiling(int x, int y, Layer mapLayer)

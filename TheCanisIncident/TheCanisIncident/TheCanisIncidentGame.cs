@@ -17,8 +17,8 @@ namespace TheCanisIncident.WindowsDX
         public TheCanisIncidentGame()
         {
             _graphics = new GraphicsDeviceManager(this);
-            _graphics.PreferredBackBufferWidth = 1280;
-            _graphics.PreferredBackBufferHeight = 720;
+            _graphics.PreferredBackBufferWidth = 1920;
+            _graphics.PreferredBackBufferHeight = 1080;
             Content.RootDirectory = "Content";
             Components.Add(new ColdsteelComponent(this, this));
             IsMouseVisible = true;
