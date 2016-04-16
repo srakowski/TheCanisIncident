@@ -34,6 +34,8 @@ namespace TheCanisIncident.WindowsDX
                 GraphicsDevice.PresentationParameters.Bounds.Width * 0.5f,
                 GraphicsDevice.PresentationParameters.Bounds.Height * 0.5f
                 )));
+
+            input.AddControl("Fire", new MouseButtonControl(MouseButton.Left));
         }
 
         public void RegisterStages(GameStageCollection stages)

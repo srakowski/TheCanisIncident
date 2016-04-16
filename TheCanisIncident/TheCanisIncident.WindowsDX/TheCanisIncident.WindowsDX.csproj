@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\sprites\adi.png" />
+    <Content Include="Content\sprites\bullet.png" />
     <Content Include="Content\sprites\ceiling.png" />
     <Content Include="Content\sprites\crosshair.png" />
     <Content Include="Content\sprites\floor.png" />

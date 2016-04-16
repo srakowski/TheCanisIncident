@@ -9,6 +9,7 @@
     <Import_RootNamespace>TheCanisIncident</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Bullet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\CameraFollow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\EnemyBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PlayerController.cs" />

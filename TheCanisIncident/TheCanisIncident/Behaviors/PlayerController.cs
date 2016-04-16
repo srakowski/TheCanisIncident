@@ -4,6 +4,10 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
+using Coldsteel.Renderers;
+using Microsoft.Xna.Framework.Graphics;
+using Coldsteel.Colliders;
 
 namespace TheCanisIncident.Behaviors
 {
@@ -14,6 +18,10 @@ namespace TheCanisIncident.Behaviors
         private Vector2 _previousPosition;
 
         private GameObject _crosshair;
+
+        private bool _canFire = true;
+
+        private int _rateOfFire = 100;
 
         public PlayerController(GameObject crosshair)
         {
@@ -51,8 +59,24 @@ namespace TheCanisIncident.Behaviors
                 _crosshair.Transform.LocalPosition = aimDirection;
             }
 
-            
+            if (Input.GetControl<ButtonControl>("Fire").IsDown())
+                StartCoroutine(SpawnBullet());
+        }
 
+        private IEnumerator SpawnBullet()
+        {
+            if (!_canFire)
+                yield break;
+
+            _canFire = false;
+            var bullet = new GameObject("bullet")
+                .SetPosition(Transform.Position)
+                .AddComponent(new Bullet(_crosshair.Transform.LocalPosition))
+                .AddComponent(new BoxCollider(20, 20))
+                .AddComponent(new SpriteRenderer(GetLayer("bullets"), GetContent<Texture2D>("sprites/bullet")));
+            AddGameObject(bullet);
+            yield return WaitMSecs(_rateOfFire);
+            _canFire = true;
         }
     }
 }

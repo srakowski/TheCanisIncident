@@ -14,7 +14,8 @@ namespace TheCanisIncident.Stages
     {
         protected override void LoadContent()
         {
-            LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", "sprites/adi", "sprites/crosshair");
+            LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", 
+                "sprites/adi", "sprites/crosshair", "sprites/bullet");
         }
 
         protected override void Initialize()
@@ -29,8 +30,9 @@ namespace TheCanisIncident.Stages
 
         protected void LoadMap(string mapdesc)
         {
-            var floorLayer = AddLayer("floor", -1);
-            var ceilingLayer = AddLayer("ceiling", 1);
+            var floorLayer = AddLayer("floor", -2);
+            var bulletsLayer = AddLayer("bullets", -1);
+            var ceilingLayer = AddLayer("ceiling", 1);            
             var hudLayer = AddLayer("hud", 2);
             var x = 0;
             var y = 0;
@@ -90,6 +92,9 @@ namespace TheCanisIncident.Stages
                 .SetPosition(x * 96, y * 96)
                 .AddComponent(new SpriteRenderer(mapLayer, GetContent<Texture2D>("sprites/ceiling")))
                 .AddComponent(new BoxCollider(96, 48, new Vector2(0, 24)));
+
+            obj.AddChild(new GameObject("ceiling-collider")
+                .AddComponent(new BoxCollider(96, 48, new Vector2(0, -24))));
 
             AddGameObject(obj);
         }
