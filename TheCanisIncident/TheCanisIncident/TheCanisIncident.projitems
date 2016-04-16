@@ -16,10 +16,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PickupItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PlayerController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Pointer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Stages\CutSceneStage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stages\FixedMaps.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\GameOverStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\GameplayStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\MainMenuStage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stages\Paper1Stage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TheCanisIncidentGame.cs" />
   </ItemGroup>
 </Project>

@@ -43,6 +43,7 @@ namespace TheCanisIncident.WindowsDX
         public void RegisterStages(GameStageCollection stages)
         {
             stages.RegisterStage<MainMenuStage>();
+            stages.RegisterStage<Paper1Stage>();
             stages.RegisterStage<GameplayStage>();
         }
     }

@@ -13,11 +13,13 @@ namespace TheCanisIncident.Stages
 {
     class GameplayStage : GameStage
     {
+        private GameObject _player;
+
         protected override void LoadContent()
         {
             LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", 
                 "sprites/adi", "sprites/crosshair", "sprites/bullet", "sprites/enemy",
-                "sprites/item");
+                "sprites/item", "sprites/kitty", "sprites/mushcontainer");
 
             LoadContent<SoundEffect>("audio/pickup", "audio/fire", "audio/hit");
         }
@@ -25,46 +27,51 @@ namespace TheCanisIncident.Stages
         protected override void Initialize()
         {
             BackgroundColor = new Color(12, 12, 12);
+            DefaultLayer.SpriteSortMode = SpriteSortMode.FrontToBack;
 
-            var hudLayer = AddLayer("hud", 2);
-            var player = AddPlayer(hudLayer);
-
-            var map = "###########\n#WWW####WW#\n#...WWW#..#\n#.E..P.#..#\n##.#####.##\n#W.WWWWW.W#\n#...S...P.#\n#.....E...#\n#......E..#\n###########";
-            LoadMap(map, player);
-
-
-        }
-
-        protected void LoadMap(string mapdesc, GameObject player)
-        {
             var floorLayer = AddLayer("floor", -2);
             var itemsLayer = AddLayer("items", -1);
-            var ceilingLayer = AddLayer("ceiling", 1);                        
+            var ceilingLayer = AddLayer("ceiling", 1);
+            var hudLayer = AddLayer("hud", 2);
+
+            _player = AddPlayer(hudLayer);
+                        
+            Load(FixedMaps.Lab1);
+        }
+
+        protected void Load(string mapdesc)
+        {
+            mapdesc = LoadBuildingLayout(mapdesc);
+            mapdesc = LoadConfigurations(mapdesc);
+            mapdesc = LoadObjects(mapdesc);
+        }
+
+        private string LoadBuildingLayout(string mapdesc)
+        {
             var x = 0;
             var y = 0;
-            foreach (var c in mapdesc)
+            int i = 0;
+            for (i = 0; i < mapdesc.Length; i++)
             {
+                char c = mapdesc[i];
+                if (c == ';')
+                    break;            
+                
                 switch (c)
                 {
                     case '.':
-                    case 'S':
-                    case 'E':
-                    case 'P':
-                        AddFloor(x, y, floorLayer);
-                        if (c == 'S')
-                            player.SetPosition(x * 96, y * 96);
-                        if (c == 'E')
-                            AddEnemy(x, y, DefaultLayer, player);
-                        if (c == 'P')
-                            AddPickupItem(x, y, itemsLayer);
+                    case 'D':
+                        AddFloor(x, y, GetLayer("floor"));
+                        if (c == 'D')
+                            _player.SetPosition(x * 96, y * 96);
                         break;
 
                     case '#':
-                        AddCeiling(x, y, ceilingLayer);
+                        AddCeiling(x, y, GetLayer("ceiling"));
                         break;
 
                     case 'W':
-                        AddWall(x, y, floorLayer);
+                        AddWall(x, y, GetLayer("floor"));
                         break;
 
                     case '\n':
@@ -72,9 +79,98 @@ namespace TheCanisIncident.Stages
                         y++;
                         break;
                 }
-
                 x++;
             }
+            return mapdesc.Substring(i + 1);
+        }
+
+        private string LoadConfigurations(string mapdesc)
+        {
+            var kv = new StringBuilder();
+            int i = 0;
+            for (i = 0; i < mapdesc.Length; i++)
+            {
+                char c = mapdesc[i];
+                if (c == ';')
+                {
+                    if (kv.Length > 0)
+                    {
+                        var config = kv.ToString().Split('=');
+                        ProcessConfig(config[0], config[1]);
+                        kv.Clear();
+                    }
+                    break;
+                }
+
+                if (c == '\n' && kv.Length > 0)
+                {
+                    var config = kv.ToString().Split('=');
+                    ProcessConfig(config[0], config[1]);
+                    kv.Clear();
+                }
+                else if (c != '\n')
+                {
+                    kv.Append(c);
+                }
+            }
+            return mapdesc.Substring(i + 1);
+        }
+
+        private string LoadObjects(string mapdesc)
+        {
+            var kv = new StringBuilder();
+            int i = 0;
+            for (i = 0; i < mapdesc.Length; i++)
+            {
+                char c = mapdesc[i];
+                if (c == ';')
+                {
+                    if (kv.Length > 0)
+                    {
+                        var config = kv.ToString().Split(',');
+                        ProcessObject(config[0], config[1], config[2]);
+                        kv.Clear();
+                    }
+                    break;
+                }
+
+                if (c == '\n' && kv.Length > 0)
+                {
+                    var config = kv.ToString().Split(',');
+                    ProcessObject(config[0], config[1], config[2]);
+                    kv.Clear();
+                }
+                else if (c != '\n')
+                {
+                    kv.Append(c);
+                }
+            }
+            return mapdesc.Substring(i + 1);
+        }
+
+        private void ProcessConfig(string key, string value)
+        {
+            if (key == "CanFire")
+                _player.GetComponent<PlayerController>().CanFire = bool.Parse(value);
+            if (key == "Position")
+            {
+                var coords = value.Split(',');
+                _player.SetPosition(float.Parse(coords[0]), float.Parse(coords[1]));
+            }
+        }
+
+        private void ProcessObject(string key, string x, string y)
+        {
+            Vector2 pos = new Vector2(float.Parse(x), float.Parse(y));
+
+            if (key == "Kitty")
+                AddGameObject()
+                    .SetPosition(pos)
+                    .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/kitty")));
+            if (key == "MushContainer")
+                AddGameObject()
+                    .SetPosition(pos)
+                    .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/mushcontainer")));
         }
 
         private GameObject AddPlayer(Layer hudLayer)
@@ -82,7 +178,7 @@ namespace TheCanisIncident.Stages
             var crosshair = new GameObject("crosshair")
                 .AddComponent(new SpriteRenderer(hudLayer, GetContent<Texture2D>("sprites/crosshair")));
 
-            var obj = new GameObject("player")
+            var obj = new GameObject("_player")
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/adi")))
                 .AddComponent(new PlayerController(crosshair))
                 .AddComponent(new BoxCollider(30, 72))
@@ -100,14 +196,14 @@ namespace TheCanisIncident.Stages
             return obj;
         }
 
-        private void AddEnemy(int x, int y, Layer defaultLayer, GameObject player)
+        private void AddEnemy(int x, int y, Layer defaultLayer)
         {
             var obj = new GameObject("enemy")
                 .SetPosition(x * 96, y * 96)
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/enemy")))
                 .AddComponent(new BoxCollider(80, 50))
                 .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/hit")))
-                .AddComponent(new Enemy(player));
+                .AddComponent(new Enemy(_player));
 
             AddGameObject(obj);
         }

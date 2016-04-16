@@ -19,7 +19,7 @@ namespace TheCanisIncident.Behaviors
 
         private GameObject _crosshair;
 
-        private bool _canFire = true;
+        public bool CanFire { get; set; } = true;
 
         private int _rateOfFire = 100;
 
@@ -52,12 +52,12 @@ namespace TheCanisIncident.Behaviors
 
             var aimDirection = Input.GetControl<DirectionalControl>("Aim").Direction();
             _crosshair.Transform.LocalPosition = aimDirection;
-            if (Vector2.Distance(_crosshair.Transform.Position, Transform.Position) > 200f)
-            {
-                aimDirection.Normalize();
-                aimDirection *= 200f;
-                _crosshair.Transform.LocalPosition = aimDirection;
-            }
+            //if (Vector2.Distance(_crosshair.Transform.Position, Transform.Position) > 200f)
+            //{
+            //    aimDirection.Normalize();
+            //    aimDirection *= 200f;
+            //    _crosshair.Transform.LocalPosition = aimDirection;
+            //}
 
             if (Input.GetControl<ButtonControl>("Fire").IsDown())
                 StartCoroutine(SpawnBullet());
@@ -65,10 +65,10 @@ namespace TheCanisIncident.Behaviors
 
         private IEnumerator SpawnBullet()
         {
-            if (!_canFire)
+            if (!CanFire)
                 yield break;
 
-            _canFire = false;
+            CanFire = false;
             GetComponent<AudioSource>().Play();
             var bullet = new GameObject("bullet")
                 .SetPosition(Transform.Position)
@@ -77,7 +77,7 @@ namespace TheCanisIncident.Behaviors
                 .AddComponent(new SpriteRenderer(GetLayer("items"), GetContent<Texture2D>("sprites/bullet")));
             AddGameObject(bullet);
             yield return WaitMSecs(_rateOfFire);
-            _canFire = true;
+            CanFire = true;
         }
     }
 }
