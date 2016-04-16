@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheCanisIncident.WindowsDX", "TheCanisIncident.WindowsDX\TheCanisIncident.WindowsDX.csproj", "{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TheCanisIncident", "TheCanisIncident\TheCanisIncident.shproj", "{AA3F9620-E9EE-43DD-B949-EEAE98861AEC}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		TheCanisIncident\TheCanisIncident.projitems*{aa3f9620-e9ee-43dd-b949-eeae98861aec}*SharedItemsImports = 13
+		TheCanisIncident\TheCanisIncident.projitems*{7946beca-75df-4a5b-a26c-3c6b6ff8939f}*SharedItemsImports = 4
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}.Debug|x86.ActiveCfg = Debug|x86
+		{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}.Debug|x86.Build.0 = Debug|x86
+		{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}.Release|x86.ActiveCfg = Release|x86
+		{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
