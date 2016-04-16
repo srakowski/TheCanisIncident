@@ -53,12 +53,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\audio\fire.wav" />
+    <Content Include="Content\audio\hit.wav" />
+    <Content Include="Content\audio\pickup.wav" />
     <Content Include="Content\sprites\adi.png" />
     <Content Include="Content\sprites\bullet.png" />
     <Content Include="Content\sprites\ceiling.png" />
     <Content Include="Content\sprites\crosshair.png" />
     <Content Include="Content\sprites\enemy.png" />
     <Content Include="Content\sprites\floor.png" />
+    <Content Include="Content\sprites\item.png" />
     <Content Include="Content\sprites\wall.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>

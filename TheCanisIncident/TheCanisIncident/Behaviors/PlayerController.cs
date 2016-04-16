@@ -69,11 +69,12 @@ namespace TheCanisIncident.Behaviors
                 yield break;
 
             _canFire = false;
+            GetComponent<AudioSource>().Play();
             var bullet = new GameObject("bullet")
                 .SetPosition(Transform.Position)
                 .AddComponent(new Bullet(_crosshair.Transform.LocalPosition))
                 .AddComponent(new BoxCollider(20, 20))
-                .AddComponent(new SpriteRenderer(GetLayer("bullets"), GetContent<Texture2D>("sprites/bullet")));
+                .AddComponent(new SpriteRenderer(GetLayer("items"), GetContent<Texture2D>("sprites/bullet")));
             AddGameObject(bullet);
             yield return WaitMSecs(_rateOfFire);
             _canFire = true;

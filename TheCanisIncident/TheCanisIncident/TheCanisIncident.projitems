@@ -13,6 +13,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\CameraFollow.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\EnemyBase.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PickupItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PlayerController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\CutSceneStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\GameOverStage.cs" />

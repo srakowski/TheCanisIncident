@@ -35,7 +35,10 @@ namespace TheCanisIncident.Behaviors
                 this.Transform.Position = _previousPosition;
 
             if (collision.GameObject.Tag == "bullet")
-                Destroy();            
+            {
+                GetComponent<AudioSource>().Play();
+                Destroy();
+            }
         }
     }
 }

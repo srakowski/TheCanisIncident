@@ -2,6 +2,7 @@
 using Coldsteel.Colliders;
 using Coldsteel.Renderers;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -15,7 +16,10 @@ namespace TheCanisIncident.Stages
         protected override void LoadContent()
         {
             LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", 
-                "sprites/adi", "sprites/crosshair", "sprites/bullet", "sprites/enemy");
+                "sprites/adi", "sprites/crosshair", "sprites/bullet", "sprites/enemy",
+                "sprites/item");
+
+            LoadContent<SoundEffect>("audio/pickup", "audio/fire", "audio/hit");
         }
 
         protected override void Initialize()
@@ -25,7 +29,7 @@ namespace TheCanisIncident.Stages
             var hudLayer = AddLayer("hud", 2);
             var player = AddPlayer(hudLayer);
 
-            var map = "###########\n#WWW####WW#\n#...WWW#..#\n#.E....#..#\n##.#####.##\n#W.WWWWW.W#\n#...S.....#\n#.....E...#\n#......E..#\n###########";
+            var map = "###########\n#WWW####WW#\n#...WWW#..#\n#.E..P.#..#\n##.#####.##\n#W.WWWWW.W#\n#...S...P.#\n#.....E...#\n#......E..#\n###########";
             LoadMap(map, player);
 
 
@@ -34,7 +38,7 @@ namespace TheCanisIncident.Stages
         protected void LoadMap(string mapdesc, GameObject player)
         {
             var floorLayer = AddLayer("floor", -2);
-            var bulletsLayer = AddLayer("bullets", -1);
+            var itemsLayer = AddLayer("items", -1);
             var ceilingLayer = AddLayer("ceiling", 1);                        
             var x = 0;
             var y = 0;
@@ -45,11 +49,14 @@ namespace TheCanisIncident.Stages
                     case '.':
                     case 'S':
                     case 'E':
+                    case 'P':
                         AddFloor(x, y, floorLayer);
                         if (c == 'S')
                             player.SetPosition(x * 96, y * 96);
                         if (c == 'E')
                             AddEnemy(x, y, DefaultLayer, player);
+                        if (c == 'P')
+                            AddPickupItem(x, y, itemsLayer);
                         break;
 
                     case '#':
@@ -79,6 +86,7 @@ namespace TheCanisIncident.Stages
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/adi")))
                 .AddComponent(new PlayerController(crosshair))
                 .AddComponent(new BoxCollider(30, 72))
+                .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/fire")))
                 .AddChild(crosshair);
 
             AddGameObject(obj);
@@ -98,6 +106,7 @@ namespace TheCanisIncident.Stages
                 .SetPosition(x * 96, y * 96)
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/enemy")))
                 .AddComponent(new BoxCollider(80, 50))
+                .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/hit")))
                 .AddComponent(new Enemy(player));
 
             AddGameObject(obj);
@@ -131,6 +140,18 @@ namespace TheCanisIncident.Stages
             var obj = new GameObject("floor")
                 .SetPosition(x * 96, y * 96)
                 .AddComponent(new SpriteRenderer(mapLayer, GetContent<Texture2D>("sprites/floor")));
+
+            AddGameObject(obj);
+        }
+
+        private void AddPickupItem(int x, int y, Layer itemsLayer)
+        {
+            var obj = new GameObject("item")
+                .SetPosition(x * 96, y * 96)
+                .AddComponent(new PickupItem())
+                .AddComponent(new SpriteRenderer(itemsLayer, GetContent<Texture2D>("sprites/item")))
+                .AddComponent(new BoxCollider(24, 12, new Vector2(0, 6)))
+                .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/pickup")));
 
             AddGameObject(obj);
         }
