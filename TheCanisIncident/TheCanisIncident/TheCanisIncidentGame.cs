@@ -21,7 +21,7 @@ namespace TheCanisIncident.WindowsDX
             _graphics.PreferredBackBufferHeight = 1080;
             Content.RootDirectory = "Content";
             Components.Add(new ColdsteelComponent(this, this));
-            IsMouseVisible = true;
+            //IsMouseVisible = true;
         }
 
         public void InitializeControls(Input input)
@@ -36,10 +36,13 @@ namespace TheCanisIncident.WindowsDX
                 )));
 
             input.AddControl("Fire", new MouseButtonControl(MouseButton.Left));
+            input.AddControl("Pointer", new MousePositionalControl());
+            input.AddControl("PointerClick", new MouseButtonControl(MouseButton.Left));
         }
 
         public void RegisterStages(GameStageCollection stages)
         {
+            stages.RegisterStage<MainMenuStage>();
             stages.RegisterStage<GameplayStage>();
         }
     }

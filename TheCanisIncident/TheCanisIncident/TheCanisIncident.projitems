@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\EnemyBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PickupItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PlayerController.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Pointer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\CutSceneStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\GameOverStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\GameplayStage.cs" />
