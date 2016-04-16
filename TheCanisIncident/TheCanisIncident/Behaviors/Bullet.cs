@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Collections;
 
 namespace TheCanisIncident.Behaviors
 {
@@ -16,8 +17,9 @@ namespace TheCanisIncident.Behaviors
         {
             direction.Normalize();
             _velocity = direction * _speed;
+            StartCoroutine(TimeToLive());
         }
-
+        
         public override void Update(IGameTime gameTime)
         {
             Transform.Position += _velocity * gameTime.Delta;
@@ -27,6 +29,12 @@ namespace TheCanisIncident.Behaviors
         {
             if (collision.GameObject.Tag != "player")
                 Destroy();
+        }
+
+        private IEnumerator TimeToLive()
+        {
+            yield return WaitMSecs(2000);
+            Destroy();
         }
     }
 }

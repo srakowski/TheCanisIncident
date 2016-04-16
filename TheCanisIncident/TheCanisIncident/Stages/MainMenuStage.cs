@@ -55,7 +55,7 @@ namespace TheCanisIncident.Stages
             var pointerPos = ScreenPosToLayerPos(screenClickPos, DefaultLayer).ToPoint();
             var pointerBounds = new Rectangle(pointerPos.X, pointerPos.Y, 1, 1);
             CheckButtonClick(pointerBounds, _playStoryButton, () => GameStageManager.LoadStage("Paper1Stage"));
-            CheckButtonClick(pointerBounds, _playEndlessButton, () => GameStageManager.LoadStage("GameplayStage"));
+            CheckButtonClick(pointerBounds, _playEndlessButton, () => GameStageManager.LoadStage("EntranceStage"));
         }
 
         private void CheckButtonClick(Rectangle pointerBounds, GameObject button, Action doThis)

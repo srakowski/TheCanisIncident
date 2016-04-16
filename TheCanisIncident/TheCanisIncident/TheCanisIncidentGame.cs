@@ -42,9 +42,13 @@ namespace TheCanisIncident.WindowsDX
 
         public void RegisterStages(GameStageCollection stages)
         {
+            stages.RegisterStage<GeneratedLevelStage>();
             stages.RegisterStage<MainMenuStage>();
             stages.RegisterStage<Paper1Stage>();
-            stages.RegisterStage<GameplayStage>();
+            stages.RegisterStage<Paper2Stage>();
+            stages.RegisterStage<ResolveStage>();
+            stages.RegisterStage<EntranceStage>();            
+            stages.RegisterStage<InitialLabStage>();
         }
     }
 }

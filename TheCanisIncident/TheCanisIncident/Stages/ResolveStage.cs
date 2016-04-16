@@ -9,11 +9,11 @@ using TheCanisIncident.Behaviors;
 
 namespace TheCanisIncident.Stages
 {
-    class Paper1Stage : GameStage
+    class ResolveStage : GameStage
     {
         protected override void LoadContent()
         {
-            LoadContent<Texture2D>("sprites/paper1");
+            LoadContent<Texture2D>("sprites/comic");
         }
 
         protected override void Initialize()
@@ -21,10 +21,10 @@ namespace TheCanisIncident.Stages
             BackgroundColor = new Color(35, 35, 45);
             AddGameObject().AddComponent(new Camera());
             AddGameObject()
-                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/paper1")));
+                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/comic")));
 
             AddGameObject()
-                .AddComponent(new CutScene("InitialLabStage"));
+                .AddComponent(new CutScene("EntranceStage"));
         }
     }
 }

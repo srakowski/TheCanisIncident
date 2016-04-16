@@ -11,16 +11,22 @@
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Bullet.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\CameraFollow.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\CutScene.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Door.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Enemy.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\EnemyBase.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PickupItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\PlayerController.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Behaviors\Pointer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Stages\FixedMaps.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stages\EntranceStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\GameOverStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\GameplayStage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stages\GeneratedLevelStage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stages\InitialLabStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\MainMenuStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Stages\Paper1Stage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stages\Paper2Stage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Stages\ResolveStage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)TheCanisIncidentGame.cs" />
   </ItemGroup>
 </Project>

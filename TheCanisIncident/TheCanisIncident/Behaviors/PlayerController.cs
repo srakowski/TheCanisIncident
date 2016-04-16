@@ -73,7 +73,7 @@ namespace TheCanisIncident.Behaviors
             var bullet = new GameObject("bullet")
                 .SetPosition(Transform.Position)
                 .AddComponent(new Bullet(_crosshair.Transform.LocalPosition))
-                .AddComponent(new BoxCollider(20, 20))
+                .AddComponent(new BoxCollider(20, 20).SetIsDynamic(true))
                 .AddComponent(new SpriteRenderer(GetLayer("items"), GetContent<Texture2D>("sprites/bullet")));
             AddGameObject(bullet);
             yield return WaitMSecs(_rateOfFire);

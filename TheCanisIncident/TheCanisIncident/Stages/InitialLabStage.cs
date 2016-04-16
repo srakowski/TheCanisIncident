@@ -4,9 +4,9 @@ using System.Text;
 
 namespace TheCanisIncident.Stages
 {
-    public static class FixedMaps
+    class InitialLabStage : GameplayStage
     {
-        public static string Lab1
+        private static string Lab
         {
             get
             {
@@ -17,10 +17,10 @@ namespace TheCanisIncident.Stages
                 layout.AppendLine("#..............#");
                 layout.AppendLine("#####..........#");
                 layout.AppendLine("#WWWW..........#");
-                layout.AppendLine("#..............#");
-                layout.AppendLine("#..............W");
-                layout.AppendLine("#..............D");
-                layout.AppendLine("################");
+                layout.AppendLine("#..............##");
+                layout.AppendLine("#..............WW");
+                layout.AppendLine("#...............1");
+                layout.AppendLine("#################");
                 layout.AppendLine(";");
                 layout.AppendLine("CanFire=false");
                 layout.AppendLine("Position=900,384");
@@ -30,6 +30,22 @@ namespace TheCanisIncident.Stages
                 layout.AppendLine(";");
                 return layout.ToString().Replace("\r", "");
             }
+        }
+
+        public InitialLabStage()
+            : base (Lab)
+        {
+            _doorRegistry[1] = "Paper2Stage";
+        }
+
+        protected override void Initialize()
+        {
+            base.Initialize();
+            var crosshair = CreateCrosshair(GetLayer("hud"));
+            var player = AddPlayer(crosshair).SetPosition(800, 400);
+            var camera = AddCamera(player).SetPosition(player.Transform.Position);
+            AddKitty(600, 400);
+            AddProp(1280, 200, "sprites/mushcontainer");
         }
     }
 }
