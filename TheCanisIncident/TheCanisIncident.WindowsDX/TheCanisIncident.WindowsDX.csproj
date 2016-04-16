@@ -53,6 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\sprites\adi.png" />
+    <Content Include="Content\sprites\ceiling.png" />
+    <Content Include="Content\sprites\floor.png" />
+    <Content Include="Content\sprites\wall.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Stages\" />
   </ItemGroup>
   <Import Project="..\TheCanisIncident\TheCanisIncident.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
