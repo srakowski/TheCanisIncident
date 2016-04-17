@@ -25,8 +25,6 @@ namespace TheCanisIncident.Stages
 
         protected override void Initialize()
         {
-            BackgroundColor = new Color(35, 35, 45);
-
             var hudLayer = AddLayer("hud", 1);
             
             AddGameObject()
@@ -54,8 +52,8 @@ namespace TheCanisIncident.Stages
             var cam = _camera.GetComponent<Camera>();
             var pointerPos = ScreenPosToLayerPos(screenClickPos, DefaultLayer).ToPoint();
             var pointerBounds = new Rectangle(pointerPos.X, pointerPos.Y, 1, 1);
-            CheckButtonClick(pointerBounds, _playStoryButton, () => GameStageManager.LoadStage("Paper1Stage"));
-            CheckButtonClick(pointerBounds, _playEndlessButton, () => GameStageManager.LoadStage("EntranceStage"));
+            CheckButtonClick(pointerBounds, _playStoryButton, () => GameStageManager.LoadStage("Paper1Stage", new GameData()));
+            CheckButtonClick(pointerBounds, _playEndlessButton, () => GameStageManager.LoadStage("EntranceStage", new GameData() { Endless = true }));
         }
 
         private void CheckButtonClick(Rectangle pointerBounds, GameObject button, Action doThis)

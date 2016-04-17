@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TheCanisIncident.Stages
 {
-    class InitialLabStage : GameplayStage
+    class FinalLabStage : GameplayStage
     {
         private static string Lab
         {
@@ -19,23 +19,22 @@ namespace TheCanisIncident.Stages
                 layout.AppendLine("#WWWW..........#");
                 layout.AppendLine("#..............###");
                 layout.AppendLine("#..............WW#");
-                layout.AppendLine("#.............--X#");
+                layout.AppendLine("#.............--E#");
                 layout.AppendLine("##################");
                 return layout.ToString().Replace("\r", "");
             }
         }
 
-        public InitialLabStage()
-            : base (Lab)
+        public FinalLabStage()
+            : base(Lab)
         {
-            NextStage = "Paper2Stage";
         }
 
         protected override void Initialize()
         {
             base.Initialize();
             var crosshair = CreateCrosshair();
-            var player = AddPlayer(crosshair).SetPosition(800, 400);
+            var player = AddPlayer(crosshair).SetPosition(PlayerStart);
             AddHud();
             var camera = AddCamera(player).SetPosition(player.Transform.Position);
             AddKitty(600, 400);

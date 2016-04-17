@@ -58,7 +58,10 @@
     <Content Include="Content\audio\hit.wav" />
     <Content Include="Content\audio\pickup.wav" />
     <Content Include="Content\sprites\comic.png" />
+    <Content Include="Content\sprites\healthbarback.png" />
+    <Content Include="Content\sprites\healthbarfront.png" />
     <Content Include="Content\sprites\kitty.png" />
+    <Content Include="Content\sprites\mush.png" />
     <Content Include="Content\sprites\mushcontainer.png" />
     <Content Include="Content\sprites\paper1.png" />
     <Content Include="Content\sprites\paper2.png" />

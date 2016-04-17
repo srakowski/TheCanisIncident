@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TheCanisIncident.Behaviors
+namespace TheCanisIncident.Behaviors.Weapons
 {
-    class EnemyBase
+    class Shotgun
     {
     }
 }

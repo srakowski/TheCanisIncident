@@ -16,9 +16,19 @@ namespace TheCanisIncident.Stages
         protected override void Initialize()
         {
             base.Initialize();
-            var crosshair = CreateCrosshair(GetLayer("hud"));
+            var crosshair = CreateCrosshair();
             var player = AddPlayer(crosshair).SetPosition(PlayerStart);
+            AddHud();
             var camera = AddCamera(player).SetPosition(player.Transform.Position);
+            var gd = this.Param as GameData;
+            gd.Level++;
+            if (gd.Level >= gd.MaxLevels && !gd.Endless)
+                NextStage = "FinalLabStage";
+            else
+                NextStage = "GeneratedLevelStage";
+
+            var rand = new Random();
+            LoadMushPiles(player, rand.Next(16, 32));
         }
 
         private static string GenerateMap()
@@ -29,8 +39,8 @@ namespace TheCanisIncident.Stages
             var rooms = new List<Rectangle>();
             for (var i = 0; i < 5; i++)
             {
-                var w = rand.Next(6, 13);
-                var h = rand.Next(6, 13);
+                var w = rand.Next(8, 16);
+                var h = rand.Next(8, 14);
                 rooms.Add(new Rectangle(-w / 2, -h / 2, w, h));
             }
 
@@ -46,7 +56,7 @@ namespace TheCanisIncident.Stages
                 if (x >= 1f || x <= -1f) xdir *= -1;
                 y += ydir;
                 if (y >= 1f || y <= -1f) ydir *= -1;
-                direction *= 3;
+                direction *= 6;
                 bool intersects = true;
                 while (intersects)
                 {
@@ -104,27 +114,53 @@ namespace TheCanisIncident.Stages
                 Connect(map, sp, ep);
             }
 
-            var door = new Point(width - 3, rand.Next(3, height - 3));
+            var entryDoor = new Point(width - 1, rand.Next(4, height - 4));
             var aroom = rooms.First();
-            var end = new Vector2(aroom.X + (aroom.Width / 2) - (int)tl.X,
+            var aroomPos = new Vector2(aroom.X + (aroom.Width / 2) - (int)tl.X,
                 aroom.Y + (aroom.Height / 2) - (int)tl.Y).ToPoint();
-            Connect(map, door, end, false);
-            map[door.X, door.Y] = '0';
+            Connect(map, entryDoor, aroomPos, false);
+            map[entryDoor.X, entryDoor.Y] = 'E';
+
+            var exitDoor = new Point(0, rand.Next(4, height - 4));
+            var lroom = rooms.Last();
+            var lroomPos = new Vector2(lroom.X + (lroom.Width / 2) - (int)tl.X,
+                lroom.Y + (lroom.Height / 2) - (int)tl.Y).ToPoint();
+            Connect(map, exitDoor, lroomPos, false);
+            map[exitDoor.X, exitDoor.Y] = 'X';
 
             StringBuilder sb = new StringBuilder();
+            for (var p = 0; p < width; p++)
+                sb.Append("#");
+            sb.AppendLine();
             for (var my = 0; my < height; my++)
             {
+                sb.Append('#');
                 for (var mx = 0; mx < width; mx++)
                 {
                     if (my < height - 1)
-                        if (map[mx, my] == '\0' && (map[mx, my + 1] == '.' || map[mx, my + 1] == '0'))
-                            map[mx, my] = 'W';
+                        if (map[mx, my] == '\0' && (map[mx, my + 1] == '.' || map[mx, my + 1] == '-' || map[mx, my + 1] == 'E' || map[mx, my + 1] == 'X'))
+                        {
+                            if (my > 0)
+                            {
+                                if (map[mx, my - 1] == '\0')
+                                    map[mx, my] = 'W';
+                                else
+                                    map[mx, my] = '.';
+                            }
+                            else
+                            {
+                                map[mx, my] = 'W';
+                            }
+                        }
+                            
                     
                     sb.Append(map[mx, my] == '\0' ? '#' : map[mx, my]);
                 }
+                sb.Append('#');
                 sb.AppendLine();
             }
-
+            for (var p = 0; p < width; p++)
+                sb.Append("#");
             sb.AppendLine(";");
 
             return sb.ToString();
@@ -134,44 +170,44 @@ namespace TheCanisIncident.Stages
         {
             while (sp.X > ep.X)
             {
-                map[sp.X, sp.Y] = '.';
+                map[sp.X, sp.Y] = '-';
                 if (wide)
                 {
-                    map[sp.X, sp.Y + 1] = '.';
-                    map[sp.X, sp.Y - 1] = '.';
+                    map[sp.X, sp.Y + 1] = '-';
+                    map[sp.X, sp.Y - 1] = '-';
                 }
                 sp.X--;
             }
 
             while (sp.X < ep.X)
             {
-                map[sp.X, sp.Y] = '.';
+                map[sp.X, sp.Y] = '-';
                 if (wide)
                 {
-                    map[sp.X, sp.Y + 1] = '.';
-                    map[sp.X, sp.Y - 1] = '.';
+                    map[sp.X, sp.Y + 1] = '-';
+                    map[sp.X, sp.Y - 1] = '-';
                 }
                 sp.X++;
             }
 
             while (sp.Y > ep.Y)
             {
-                map[sp.X, sp.Y] = '.';
+                map[sp.X, sp.Y] = '-';
                 if (wide)
                 {
-                    map[sp.X + 1, sp.Y] = '.';
-                    map[sp.X - 1, sp.Y] = '.';
+                    map[sp.X + 1, sp.Y] = '-';
+                    map[sp.X - 1, sp.Y] = '-';
                 }
                 sp.Y--;
             }
 
             while (sp.Y < ep.Y)
             {
-                map[sp.X, sp.Y] = '.';
+                map[sp.X, sp.Y] = '-';
                 if (wide)
                 {
-                    map[sp.X + 1, sp.Y] = '.';
-                    map[sp.X - 1, sp.Y] = '.';
+                    map[sp.X + 1, sp.Y] = '-';
+                    map[sp.X - 1, sp.Y] = '-';
                 }
                 sp.Y++;
             }

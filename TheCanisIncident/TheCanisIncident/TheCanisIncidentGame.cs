@@ -21,6 +21,7 @@ namespace TheCanisIncident.WindowsDX
             _graphics.PreferredBackBufferHeight = 1080;
             Content.RootDirectory = "Content";
             Components.Add(new ColdsteelComponent(this, this));
+            GameStage.DefaultBackgroundColor = new Color(35, 35, 45);
             //IsMouseVisible = true;
         }
 
@@ -41,14 +42,15 @@ namespace TheCanisIncident.WindowsDX
         }
 
         public void RegisterStages(GameStageCollection stages)
-        {
-            stages.RegisterStage<GeneratedLevelStage>();
+        {            
             stages.RegisterStage<MainMenuStage>();
+            stages.RegisterStage<GeneratedLevelStage>();
             stages.RegisterStage<Paper1Stage>();
             stages.RegisterStage<Paper2Stage>();
             stages.RegisterStage<ResolveStage>();
             stages.RegisterStage<EntranceStage>();            
             stages.RegisterStage<InitialLabStage>();
+            stages.RegisterStage<FinalLabStage>();
         }
     }
 }

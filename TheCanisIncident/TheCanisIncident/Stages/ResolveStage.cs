@@ -17,14 +17,13 @@ namespace TheCanisIncident.Stages
         }
 
         protected override void Initialize()
-        {
-            BackgroundColor = new Color(35, 35, 45);
+        {            
             AddGameObject().AddComponent(new Camera());
             AddGameObject()
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/comic")));
 
             AddGameObject()
-                .AddComponent(new CutScene("EntranceStage"));
+                .AddComponent(new CutScene("EntranceStage", this.Param));
         }
     }
 }
