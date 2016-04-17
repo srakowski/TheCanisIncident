@@ -9,12 +9,15 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using TheCanisIncident.Behaviors;
+using TheCanisIncident.Models;
 
 namespace TheCanisIncident.Stages
 {
     abstract class GameplayStage : GameStage
     {
-        protected GameData Data { get { return Param as GameData; } }
+        private static Random _random = new Random();
+
+        protected GameData Data { get { return Param as GameData ?? new GameData(); } }
 
         private string _map;
 
@@ -28,15 +31,20 @@ namespace TheCanisIncident.Stages
 
         public GameplayStage(string map)
         {
+            Enemy.TotalEnemies = 0;
             _map = map;
         }
 
         protected override void LoadContent()
         {
             LoadContent<Texture2D>("sprites/wall", "sprites/ceiling", "sprites/floor", 
-                "sprites/adi", "sprites/crosshair", "sprites/bullet", "sprites/enemy",
-                "sprites/item", "sprites/kitty", "sprites/mushcontainer",
+                "sprites/adi", "sprites/crosshair", "sprites/enemy", "sprites/dot", "sprites/hatch", "sprites/kp",
+                "sprites/item", "sprites/kitty", "sprites/mushcontainer", "sprites/bk", "sprites/dk",
                 "sprites/healthbarfront", "sprites/healthbarback", "sprites/mush");
+
+            LoadContent<Texture2D>("sprites/bigtr", "sprites/littletr", "sprites/kb", "sprites/nh");
+
+            LoadContent<Texture2D>("sprites/bullet", "sprites/fragbullet", "sprites/rainbowbullet");
 
             LoadContent<SoundEffect>("audio/pickup", "audio/fire", "audio/hit",
                 "audio/mush_xplode");
@@ -48,9 +56,10 @@ namespace TheCanisIncident.Stages
 
             var floorLayer = AddLayer("floor", -2);
             var itemsLayer = AddLayer("items", -1);
-            var ceilingLayer = AddLayer("ceiling", 1);
-            var chLayer = AddLayer("crosshair", 2);
-            var hudLayer = AddLayer("hud", 3);            
+            var ceilingLayer = AddLayer("player", 1);
+            var playerLayer = AddLayer("ceiling", 2);
+            var chLayer = AddLayer("crosshair", 3);
+            var hudLayer = AddLayer("hud", 4);            
 
             Load(_map);
         }
@@ -128,7 +137,7 @@ namespace TheCanisIncident.Stages
         protected GameObject AddPlayer(GameObject crosshair)
         {
             var player = new GameObject("player")
-                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/adi")))
+                .AddComponent(new SpriteRenderer(GetLayer("player"), GetContent<Texture2D>("sprites/adi")))
                 .AddComponent(new PlayerController(crosshair, Data.Player, TraversableLayout))
                 .AddComponent(new BoxCollider(30, 72).SetIsDynamic(true))
                 .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/fire")))
@@ -159,15 +168,39 @@ namespace TheCanisIncident.Stages
                 .SetPosition(300, 160)
                 .AddComponent(new SpriteRenderer(GetLayer("hud"), GetContent<Texture2D>("sprites/healthbarback")) { LayerDepth = 0 });
             AddGameObject()
+                .SetPosition(150, 132)
+                .AddComponent(new HPBar(Data.Player))
+                .AddComponent(new SpriteRenderer(GetLayer("hud"), GetContent<Texture2D>("sprites/dot")) { LayerDepth = 50, Color = Color.Red });
+            AddGameObject()
                 .SetPosition(300, 160)
                 .AddComponent(new SpriteRenderer(GetLayer("hud"), GetContent<Texture2D>("sprites/healthbarfront")));
         }
 
-        protected GameObject AddKitty(float x, float y)
+        protected GameObject AddKitty(float x, float y, bool dead = false)
+        {
+            var k = AddGameObject()
+                .SetPosition(x, y)
+                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>(dead ? "sprites/dk" : "sprites/kitty")));
+
+            if (dead)
+            {
+                var go = new GameObject()
+                    .SetPosition(0, 40)
+                    .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/kp")));
+                k.AddChild(go);
+            }
+
+            return k;
+        }
+
+        protected GameObject AddMushContainer(float x, float y)
         {
             return AddGameObject()
                 .SetPosition(x, y)
-                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/kitty")));
+                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/mushcontainer")))
+                .AddChild(new GameObject("hatch")
+                .SetPosition(0, 50)
+                .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/hatch"))));
         }
 
         protected GameObject AddProp(float x, float y, string sprite)
@@ -228,18 +261,6 @@ namespace TheCanisIncident.Stages
             AddGameObject(obj);
         }
 
-        private void AddPickupItem(int x, int y, Layer itemsLayer)
-        {
-            var obj = new GameObject("item")
-                .SetPosition(x * 96, y * 96)
-                .AddComponent(new PickupItem())
-                .AddComponent(new SpriteRenderer(itemsLayer, GetContent<Texture2D>("sprites/item")))
-                .AddComponent(new BoxCollider(24, 12, new Vector2(0, 6)))
-                .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/pickup")));
-
-            AddGameObject(obj);
-        }
-
         public void LoadMushPiles(GameObject player, int count)
         {
             for (var c = 0; c < count; c++)
@@ -248,9 +269,24 @@ namespace TheCanisIncident.Stages
 
         private void LoadMushPile(GameObject player, Vector2 pos)
         {
+            var n = _random.Next(100);
+            EnemySpawn spawn = null;
+            if (n < 70)
+            {
+                spawn = new BatKoalaSpawn();
+            }
+            else if (n < 85)
+            {
+                spawn = new RabbitTortoiseSpawn();
+            }
+            else
+            {
+                spawn = new NarwhalHorseSpawn();
+            }
+
             AddGameObject()
                 .SetPosition(pos)
-                .AddComponent(new MushPile(player, TraversableLayout))
+                .AddComponent(new MushPile(player, TraversableLayout, spawn))
                 .AddComponent(new BoxCollider(80, 80))
                 .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/mush_xplode")))
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/mush")));

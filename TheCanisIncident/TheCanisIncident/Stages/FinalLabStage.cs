@@ -37,8 +37,8 @@ namespace TheCanisIncident.Stages
             var player = AddPlayer(crosshair).SetPosition(PlayerStart);
             AddHud();
             var camera = AddCamera(player).SetPosition(player.Transform.Position);
-            AddKitty(600, 400);
-            AddProp(1280, 200, "sprites/mushcontainer");
+            AddKitty(600, 400, true);
+            AddMushContainer(1280, 200);
         }
     }
 }

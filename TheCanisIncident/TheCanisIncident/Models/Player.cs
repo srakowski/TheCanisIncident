@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using TheCanisIncident.Behaviors.Weapons;
 
 namespace TheCanisIncident.Models
 {
     class Player
     {
-        public int HP { get; set; } = 15;
+        public int HP { get; set; } = 100;
+
+        public int MaxHP { get; set; } = 100;
 
         public int PistolBullets { get; set; } = 17;
 
@@ -17,8 +18,14 @@ namespace TheCanisIncident.Models
 
         public int Rockets { get; set; } = 0;
 
-        public Weapon EquippedWeapon { get; set; }
+        public Gun Gun { get; set; } = new Rifle();
 
-        public List<Weapon> AvailableWeapons { get; set; }
+        internal void ChangeGuns()
+        {
+            if (this.Gun is Shotgun)
+                this.Gun = new Rifle();
+            else if (this.Gun is Rifle)
+                this.Gun = new Shotgun();
+        }
     }
 }

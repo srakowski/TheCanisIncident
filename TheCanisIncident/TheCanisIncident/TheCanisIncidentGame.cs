@@ -31,6 +31,7 @@ namespace TheCanisIncident.WindowsDX
             input.AddControl("MoveDown", new KeyboardButtonControl(Keys.S));
             input.AddControl("MoveLeft", new KeyboardButtonControl(Keys.A));
             input.AddControl("MoveRight", new KeyboardButtonControl(Keys.D));
+            input.AddControl("ChangeWeapons", new KeyboardButtonControl(Keys.Q));
             input.AddControl("Aim", new MouseDirectionalControl(new Vector2(
                 GraphicsDevice.PresentationParameters.Bounds.Width * 0.5f,
                 GraphicsDevice.PresentationParameters.Bounds.Height * 0.5f
@@ -42,15 +43,15 @@ namespace TheCanisIncident.WindowsDX
         }
 
         public void RegisterStages(GameStageCollection stages)
-        {            
+        {
+            stages.RegisterStage<FinalLabStage>();
             stages.RegisterStage<MainMenuStage>();
             stages.RegisterStage<GeneratedLevelStage>();
             stages.RegisterStage<Paper1Stage>();
             stages.RegisterStage<Paper2Stage>();
             stages.RegisterStage<ResolveStage>();
             stages.RegisterStage<EntranceStage>();            
-            stages.RegisterStage<InitialLabStage>();
-            stages.RegisterStage<FinalLabStage>();
+            stages.RegisterStage<InitialLabStage>();            
         }
     }
 }

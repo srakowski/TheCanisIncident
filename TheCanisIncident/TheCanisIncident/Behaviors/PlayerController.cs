@@ -14,9 +14,11 @@ namespace TheCanisIncident.Behaviors
 {
     class PlayerController : Behavior
     {
+        private static Random _rand = new Random();
+
         private Player _player;
 
-        private float _speed = 0.4f;
+        private float _speed = 0.5f;
 
         private Vector2 _previousPosition;
 
@@ -24,11 +26,15 @@ namespace TheCanisIncident.Behaviors
 
         public bool CanFire { get; set; } = true;
 
-        private int _rateOfFire = 100;
-
         private bool[,] _layout;
 
         private Vector2 _offset = new Vector2(48, 48);
+
+        public Gun Gun
+        {
+            get { return _player.Gun; }
+        }
+
 
         public PlayerController(GameObject crosshair, Player player, bool[,] layout)
         {
@@ -39,6 +45,18 @@ namespace TheCanisIncident.Behaviors
 
         public override void OnCollision(Collision collision)
         {
+            if (collision.GameObject.Tag == "rainbow" || collision.GameObject.Tag == "enemy")
+            {
+                this._player.HP -= 6;
+                if (this._player.HP < 0)               
+                    GameStageManager.LoadStage("MainMenuStage");
+            }
+            if (collision.GameObject.Tag == "pickup")
+            {
+                this._player.HP++;
+                if (this._player.HP > this._player.MaxHP)
+                    this._player.HP = this._player.MaxHP;
+            }
         }
 
         public override void Update(IGameTime gameTime)
@@ -65,8 +83,14 @@ namespace TheCanisIncident.Behaviors
             var aimDirection = Input.GetControl<DirectionalControl>("Aim").Direction();
             _crosshair.Transform.LocalPosition = aimDirection;
 
-            if (Input.GetControl<ButtonControl>("Fire").IsDown())
-                StartCoroutine(SpawnBullet());
+            if (Input.GetControl<ButtonControl>("ChangeWeapons").WasPressed())
+            {
+                _player.ChangeGuns();
+            }
+            else if (Input.GetControl<ButtonControl>("Fire").IsDown())
+            {
+                StartCoroutine(FireGun(Gun));
+            }
         }
 
         private void AdjustWorldCollision()
@@ -83,20 +107,23 @@ namespace TheCanisIncident.Behaviors
                 this.Transform.Position = _previousPosition;
         }
 
-        private IEnumerator SpawnBullet()
+        private IEnumerator FireGun(Gun gun)
         {
             if (!CanFire)
                 yield break;
 
             CanFire = false;
             GetComponent<AudioSource>().Play();
-            var bullet = new GameObject("bullet")
-                .SetPosition(Transform.Position)
-                .AddComponent(new Bullet(_crosshair.Transform.LocalPosition, _layout))
-                .AddComponent(new BoxCollider(20, 20).SetIsDynamic(true))
-                .AddComponent(new SpriteRenderer(GetLayer("items"), GetContent<Texture2D>("sprites/bullet")));
-            AddGameObject(bullet);
-            yield return WaitMSecs(_rateOfFire);
+            for (var i = 0; i < gun.BulletsToSpawn; i++)
+            {
+                var bullet = new GameObject("bullet")
+                    .SetPosition(Transform.Position)
+                    .AddComponent(new Bullet(_crosshair.Transform.LocalPosition, _layout, gun.TTL, gun.Spread, gun.Speed))
+                    .AddComponent(new BoxCollider(20, 20).SetIsDynamic(true))
+                    .AddComponent(new SpriteRenderer(GetLayer("items"), GetContent<Texture2D>(gun.Texture)));
+                AddGameObject(bullet);
+            }            
+            yield return WaitMSecs(gun.RateOfFire);
             CanFire = true;
         }
     }

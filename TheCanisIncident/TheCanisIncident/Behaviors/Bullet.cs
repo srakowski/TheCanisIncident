@@ -9,7 +9,7 @@ namespace TheCanisIncident.Behaviors
 {
     class Bullet : Behavior
     {
-        private float _speed = 2f;
+        private static Random _random = new Random();
 
         private Vector2 _velocity;
 
@@ -17,16 +17,28 @@ namespace TheCanisIncident.Behaviors
 
         private bool _dead = false;
 
-        public Bullet(Vector2 direction, bool[,] layout)
+        private float _rotation;
+
+        private bool _first = true;
+
+        public Bullet(Vector2 direction, bool[,] layout, int ttl, int spread, float speed)
         {
             direction.Normalize();
-            _velocity = direction * _speed;
-            StartCoroutine(TimeToLive());
+            direction = Vector2.Transform(direction, Matrix.CreateRotationZ(MathHelper.ToRadians(_random.Next(-spread, spread + 1))));
+            _rotation = (float)Math.Atan2(direction.X, -direction.Y);
+            _velocity = direction * speed;
+            StartCoroutine(TimeToLive(ttl));
             _layout = layout;
         }
         
         public override void Update(IGameTime gameTime)
         {
+            if (_first)
+            {
+                Transform.Rotation = _rotation;
+                _first = false;
+            }
+
             Transform.Position += _velocity * gameTime.Delta;
             try
             {
@@ -44,7 +56,9 @@ namespace TheCanisIncident.Behaviors
                 }
             }
             catch
-            { }        
+            {
+                Destroy();
+            }        
         }
 
         private IEnumerator DestroyNext()
@@ -56,13 +70,15 @@ namespace TheCanisIncident.Behaviors
 
         public override void OnCollision(Collision collision)
         {
-            if (collision.GameObject.Tag == "enemy")
+            if (collision.GameObject.Tag == "enemy" && this.GameObject.Tag != "rainbow")
+                Destroy();
+            if (collision.GameObject.Tag == "player" && this.GameObject.Tag == "rainbow")
                 Destroy();
         }
 
-        private IEnumerator TimeToLive()
+        private IEnumerator TimeToLive(int ttl)
         {
-            yield return WaitMSecs(2000);
+            yield return WaitMSecs(ttl);
             Destroy();
         }
     }
