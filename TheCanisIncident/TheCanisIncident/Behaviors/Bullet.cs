@@ -70,9 +70,9 @@ namespace TheCanisIncident.Behaviors
 
         public override void OnCollision(Collision collision)
         {
-            if (collision.GameObject.Tag == "enemy" && this.GameObject.Tag != "rainbow")
+            if (collision.GameObject.Tag == "enemy" && this.GameObject.Tag != "rainbow" && this.GameObject.Tag != "eyebullet")
                 Destroy();
-            if (collision.GameObject.Tag == "player" && this.GameObject.Tag == "rainbow")
+            if (collision.GameObject.Tag == "player" && this.GameObject.Tag == "rainbow")            
                 Destroy();
         }
 

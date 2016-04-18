@@ -1,7 +1,9 @@
 ﻿using Coldsteel;
 using Coldsteel.Renderers;
+using Coldsteel.Transitions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,6 +23,10 @@ namespace TheCanisIncident.Stages
         {
             LoadContent<Texture2D>("sprites/title", "sprites/playendless", "sprites/playstory",
                 "sprites/pointer");
+
+            var so = LoadContent<Song>("audio/menu");
+            MediaPlayer.Play(so);
+            MediaPlayer.IsRepeating = true;
         }
 
         protected override void Initialize()

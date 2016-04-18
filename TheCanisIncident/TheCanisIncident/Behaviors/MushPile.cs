@@ -42,6 +42,7 @@ namespace TheCanisIncident.Behaviors
                 {
                     DropItem();
                     GetComponent<AudioSource>().Play();
+                    AddGameObject().SetPosition(this.Transform.Position).AddComponent(new Remains());
                     Destroy();
                 }
             }

@@ -35,9 +35,9 @@ namespace TheCanisIncident.Stages
         {
             base.Initialize();
             var crosshair = CreateCrosshair();
-            var player = AddPlayer(crosshair).SetPosition(800, 400);
-            AddHud();
+            var player = AddPlayer(crosshair, false, false).SetPosition(800, 400);
             var camera = AddCamera(player).SetPosition(player.Transform.Position);
+            AddInstruct();
             AddKitty(600, 400);
             AddProp(1280, 200, "sprites/mushcontainer");
         }

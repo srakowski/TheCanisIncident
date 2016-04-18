@@ -20,6 +20,8 @@ namespace TheCanisIncident.Models
 
         public Gun Gun { get; set; } = new Rifle();
 
+        public bool HasGuts { get; internal set; } = false;
+
         internal void ChangeGuns()
         {
             if (this.Gun is Shotgun)

@@ -14,6 +14,14 @@ namespace TheCanisIncident.Models
             }
         }
 
+        public override string GunTexture
+        {
+            get
+            {
+                return "sprites/rifle";
+            }
+        }
+
         public override int RateOfFire
         {
             get

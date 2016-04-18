@@ -12,5 +12,6 @@ namespace TheCanisIncident.Models
         public abstract int BulletsToSpawn { get; }
         public abstract int Spread { get; }
         public abstract float Speed { get; }
+        public abstract string GunTexture { get; }
     }
 }

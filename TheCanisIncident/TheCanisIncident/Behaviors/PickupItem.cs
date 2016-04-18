@@ -14,10 +14,13 @@ namespace TheCanisIncident.Behaviors
 
         private float _speed;
 
-        public PickupItem(GameObject player)
+        private bool _isBoss = false;
+
+        public PickupItem(GameObject player, bool isBoss = false)
         {
             _player = player;
             _speed = 0.12f;
+            _isBoss = isBoss;
         }
 
         public override void Update(IGameTime gameTime)
@@ -32,6 +35,8 @@ namespace TheCanisIncident.Behaviors
             {
                 GetComponent<AudioSource>().Play();
                 Destroy();
+                if (_isBoss)
+                    GameStageManager.LoadStage("EndStage");
             }
         }
     }

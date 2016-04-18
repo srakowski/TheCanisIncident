@@ -40,8 +40,8 @@ namespace TheCanisIncident.Behaviors.Enemies
             {
                 _firing = true;
                 var bullet = new GameObject("rainbow")
-                    .SetPosition(Transform.Position += new Vector2(96, 0))
-                    .AddComponent(new Bullet(direction, _layout, 10000, 7, 1f))
+                    .SetPosition(Transform.Position + new Vector2(96, 0))
+                    .AddComponent(new Bullet(direction, _layout, 2000, 7, 1f))
                     .AddComponent(new BoxCollider(24, 24).SetIsDynamic(true))
                     .AddComponent(new SpriteRenderer(GetLayer("items"), GetContent<Texture2D>("sprites/rainbowbullet")));
                 AddGameObject(bullet);

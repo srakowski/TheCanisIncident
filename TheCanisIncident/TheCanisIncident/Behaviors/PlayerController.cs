@@ -9,6 +9,8 @@ using Coldsteel.Renderers;
 using Microsoft.Xna.Framework.Graphics;
 using Coldsteel.Colliders;
 using TheCanisIncident.Models;
+using Microsoft.Xna.Framework.Audio;
+using TheCanisIncident.Behaviors.Enemies;
 
 namespace TheCanisIncident.Behaviors
 {
@@ -35,9 +37,15 @@ namespace TheCanisIncident.Behaviors
             get { return _player.Gun; }
         }
 
+        bool _moving = false;
 
-        public PlayerController(GameObject crosshair, Player player, bool[,] layout)
+        private GameObject gun;
+
+        IGameTime _gameTime;
+
+        public PlayerController(GameObject crosshair, GameObject gun, Player player, bool[,] layout)
         {
+            this.gun = gun;
             _crosshair = crosshair;
             _player = player;
             _layout = layout;
@@ -48,8 +56,10 @@ namespace TheCanisIncident.Behaviors
             if (collision.GameObject.Tag == "rainbow" || collision.GameObject.Tag == "enemy")
             {
                 this._player.HP -= 6;
-                if (this._player.HP < 0)               
-                    GameStageManager.LoadStage("MainMenuStage");
+                if (this._player.HP < 0)
+                {
+                    GameStageManager.LoadStage("FailStage");
+                }
             }
             if (collision.GameObject.Tag == "pickup")
             {
@@ -57,10 +67,51 @@ namespace TheCanisIncident.Behaviors
                 if (this._player.HP > this._player.MaxHP)
                     this._player.HP = this._player.MaxHP;
             }
+            if (collision.GameObject.Tag == "guts")
+            {
+                _player.HasGuts = true;
+                collision.GameObject.Destroy();
+            }
+            if (collision.GameObject.Tag == "hatch" && _player.HasGuts)
+            {
+                _player.HasGuts = false;
+                CanFire = true;
+                StartCoroutine(MoveTo(new Vector2(300, 700)));
+                var container = collision.GameObject.Parent;
+                container.GetComponent<SpriteRenderer>().Texture = GetContent<Texture2D>("sprites/mush");
+                collision.GameObject.Destroy();
+                AddGameObject("enemy")
+                    .SetPosition(container.Transform.Position + new Vector2(-96, 96))
+                    .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/bk")))
+                    .AddComponent(new BoxCollider(200, 200) { IsDynamic = false, Enabled = false })
+                    .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/hit")))
+                    .AddComponent(new BigFrigginKitty(this.GameObject, _layout));
+            }
+        }
+
+        private IEnumerator MoveTo(Vector2 pos)
+        {
+            _moving = true;
+            float time = 0;
+            while (time < 500f)
+            {
+                time += _gameTime?.Delta ?? 0;
+                var t = time / 500f;
+                this.Transform.Position = Vector2.SmoothStep(this.Transform.Position, pos, t);
+                yield return null;
+            }
+            this.Transform.Position = pos;
+            yield return WaitMSecs(100);
+            _moving = false;
         }
 
         public override void Update(IGameTime gameTime)
         {
+            _gameTime = gameTime;
+
+            if (_moving)
+                return;
+
             _previousPosition = this.Transform.Position;
 
             if (Input.GetControl<ButtonControl>("MoveUp").IsDown())
@@ -82,10 +133,14 @@ namespace TheCanisIncident.Behaviors
 
             var aimDirection = Input.GetControl<DirectionalControl>("Aim").Direction();
             _crosshair.Transform.LocalPosition = aimDirection;
-
+            this.GetComponent<SpriteRenderer>().SpriteEffects = _crosshair.Transform.LocalPosition.X < 0 ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
+            this.gun.SetRotation((float)Math.Atan2(aimDirection.Y, aimDirection.X));            
             if (Input.GetControl<ButtonControl>("ChangeWeapons").WasPressed())
             {
                 _player.ChangeGuns();
+                var rend = this.gun.GetComponent<SpriteRenderer>();
+                if (rend != null)
+                    rend.Texture = GetContent<Texture2D>(_player.Gun.GunTexture);
             }
             else if (Input.GetControl<ButtonControl>("Fire").IsDown())
             {

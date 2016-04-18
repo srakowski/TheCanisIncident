@@ -7,11 +7,14 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TheCanisIncident.Stages;
 
 namespace TheCanisIncident.Behaviors
 {
     abstract class Enemy : Behavior
     {
+        public bool IsBoss { get; set; } = false;
+
         public static int TotalEnemies;
         public static int MaxEnemies = 32;
 
@@ -86,7 +89,8 @@ namespace TheCanisIncident.Behaviors
             {
                 this.HP--;
                 if (this.HP <= 0)
-                {                    
+                {
+                    GameplayStage.CameraShake.Shake();
                     collision.GameObject.Tag = null; // only I will be hit by this bullet
                     KillMe();
                 }
@@ -100,6 +104,7 @@ namespace TheCanisIncident.Behaviors
         private void KillMe()
         {
             GetComponent<AudioSource>().Play();
+            AddGameObject().SetPosition(this.Transform.Position).AddComponent(new Remains());
             DropItem();            
             WhenKilled();
             TotalEnemies--;
@@ -112,7 +117,7 @@ namespace TheCanisIncident.Behaviors
                 .SetPosition(this.Transform.Position + new Vector2(_rand.Next(-20, 20), _rand.Next(-20, 20)))
                 .AddComponent(new SpriteRenderer(DefaultLayer, GetContent<Texture2D>("sprites/item")))
                 .AddComponent(new AudioSource(GetContent<SoundEffect>("audio/pickup")))
-                .AddComponent(new PickupItem(Player))
+                .AddComponent(new PickupItem(Player, IsBoss))
                 .AddComponent(new BoxCollider(12, 12));
         }
 

@@ -56,12 +56,20 @@
   <ItemGroup>
     <Content Include="Content\audio\fire.wav" />
     <Content Include="Content\audio\hit.wav" />
+    <Content Include="Content\audio\menu.mp3" />
     <Content Include="Content\audio\pickup.wav" />
     <Content Include="Content\sprites\bigtr.png" />
     <Content Include="Content\sprites\comic.png" />
+    <Content Include="Content\sprites\e.png" />
+    <Content Include="Content\sprites\eyebullet.png" />
+    <Content Include="Content\sprites\f.png" />
+    <Content Include="Content\sprites\fail.png" />
     <Content Include="Content\sprites\fragbullet.png" />
+    <Content Include="Content\sprites\gib1.png" />
+    <Content Include="Content\sprites\gib2.png" />
     <Content Include="Content\sprites\healthbarback.png" />
     <Content Include="Content\sprites\healthbarfront.png" />
+    <Content Include="Content\sprites\instruct.png" />
     <Content Include="Content\sprites\kb.png" />
     <Content Include="Content\sprites\kitty.png" />
     <Content Include="Content\sprites\littletr.png" />
@@ -81,8 +89,13 @@
     <Content Include="Content\sprites\item.png" />
     <Content Include="Content\sprites\playstory.png" />
     <Content Include="Content\sprites\rainbowbullet.png" />
+    <Content Include="Content\sprites\rifle.png" />
+    <Content Include="Content\sprites\shotgun.png" />
+    <Content Include="Content\sprites\stain.png" />
     <Content Include="Content\sprites\title.png" />
     <Content Include="Content\sprites\wall.png" />
+    <Content Include="Content\sprites\x.png" />
+    <Content Include="Content\sprites\xplod.png" />
     <Content Include="Icon.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -90,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="Content\GameFont.spritefont" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="..\TheCanisIncident\TheCanisIncident.projitems" Label="Shared" />
