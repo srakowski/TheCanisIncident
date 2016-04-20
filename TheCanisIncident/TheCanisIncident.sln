@@ -7,9 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheCanisIncident.WindowsDX"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "TheCanisIncident", "TheCanisIncident\TheCanisIncident.shproj", "{AA3F9620-E9EE-43DD-B949-EEAE98861AEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheCanisIncident.DesktopGL", "TheCanisIncident.DesktopGL\TheCanisIncident.DesktopGL.csproj", "{72AFF062-9888-42E9-91D8-E4F36A44226D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		TheCanisIncident\TheCanisIncident.projitems*{aa3f9620-e9ee-43dd-b949-eeae98861aec}*SharedItemsImports = 13
+		TheCanisIncident\TheCanisIncident.projitems*{72aff062-9888-42e9-91d8-e4f36a44226d}*SharedItemsImports = 4
 		TheCanisIncident\TheCanisIncident.projitems*{7946beca-75df-4a5b-a26c-3c6b6ff8939f}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,6 +28,12 @@ Global
 		{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}.Release|Any CPU.ActiveCfg = Release|x86
 		{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}.Release|x86.ActiveCfg = Release|x86
 		{7946BECA-75DF-4A5B-A26C-3C6B6FF8939F}.Release|x86.Build.0 = Release|x86
+		{72AFF062-9888-42E9-91D8-E4F36A44226D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{72AFF062-9888-42E9-91D8-E4F36A44226D}.Debug|x86.ActiveCfg = Debug|x86
+		{72AFF062-9888-42E9-91D8-E4F36A44226D}.Debug|x86.Build.0 = Debug|x86
+		{72AFF062-9888-42E9-91D8-E4F36A44226D}.Release|Any CPU.ActiveCfg = Release|x86
+		{72AFF062-9888-42E9-91D8-E4F36A44226D}.Release|x86.ActiveCfg = Release|x86
+		{72AFF062-9888-42E9-91D8-E4F36A44226D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

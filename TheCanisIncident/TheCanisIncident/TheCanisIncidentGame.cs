@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using Coldsteel.Controls;
 using TheCanisIncident.Stages;
 
-namespace TheCanisIncident.WindowsDX
+namespace TheCanisIncident
 {
     /// <summary>
     /// This is the main type for your game.

@@ -44,8 +44,9 @@
     <Compile Include="Stages\PointerBehavior.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Coldsteel.WindowsDX">
-      <HintPath>..\..\..\coldsteel\bin\WindowsDX\Coldsteel.WindowsDX.dll</HintPath>
+    <Reference Include="Coldsteel.WindowsDX, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Coldsteel\WindowsDX\Coldsteel.WindowsDX.dll</HintPath>
     </Reference>
     <Reference Include="MonoGame.Framework">
       <HintPath>$(MonoGameInstallDirectory)\MonoGame\v3.0\Assemblies\Windows\MonoGame.Framework.dll</HintPath>
